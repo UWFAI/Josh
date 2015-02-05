@@ -2,7 +2,7 @@
 Josh's Java Game Environment
 
 Grab the files either from the "download zip" button in the lower right,
-or if you have git installed on you machine, in a terminal write
+or if you have git installed on your machine, in a terminal write
 
 ```git clone https://github.com/UWFAI/Josh```
 
