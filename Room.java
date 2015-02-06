@@ -1,3 +1,4 @@
+
 import java.util.Random;
 
 public class Room {
@@ -13,8 +14,8 @@ public class Room {
 
 	public void start() {
 		// fill room with things
-		//for (int i = 0; i < 1000; i++)
-		//	controller.list.add(new Ball("ball", rand.nextInt(640), rand.nextInt(480)));
-		controller.list.add(new Life("life", 0, 0));
+		Random rand = new Random();
+		for (int i = 0; i < 100; i++)
+			controller.list.add(new Ball("ball", rand.nextInt(width-32), rand.nextInt(height-32)));
 	}
 }
