@@ -12,11 +12,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+// this is the user interface for the simulation
+// no need to look in here
 @SuppressWarnings("serial")
-public class GameControlles  extends JPanel{
+public class GameControlles extends JPanel{
 	private JFrame frame;
 	private Controller controller;
-	//public JPanel map;
 	
 	public GameControlles(Controller c, int x, int y) {
 		super();
@@ -30,23 +31,25 @@ public class GameControlles  extends JPanel{
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocation(x, y);
-		
-		//map = new Map();
+
 		add(new Map());
 	}
 	
-	
+	// the mini map!
     class Map extends JPanel {
-
+    	// less math if the map is square
     	int size = 200;
+    	// default multipliers
     	double multW = 1.0;
     	double multH = 1.0;
     	
+    	// 
     	Map() {
             setPreferredSize(new Dimension(size,size));
             setBorder(BorderFactory.createLineBorder(Color.black));
             setBackground(Color.white);
-            //
+            
+            // just want to know when the mouse is dragged
             addMouseMotionListener(new MouseMotionListener() {
 				
 				@Override
@@ -58,7 +61,8 @@ public class GameControlles  extends JPanel{
 					updateView(getMousePosition().x, getMousePosition().y);
 				}
 			});
-            //
+            
+            // just want to know when the mouse is pressed
             addMouseListener(new MouseListener() {
 
 				@Override
@@ -78,6 +82,7 @@ public class GameControlles  extends JPanel{
 			});
         }
     	
+    	// update the game panel view to the x and y pos
     	void updateView(int x, int y)
     	{
     		int view_width = (int) (controller.gamePanel.getWidth()/multW);
@@ -90,7 +95,7 @@ public class GameControlles  extends JPanel{
     	}
     	
     	
-
+    	// draw the mini map!
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -122,11 +127,6 @@ public class GameControlles  extends JPanel{
     			
     			g.fillOval(dx, dy, 2, 2);
     		}
-    		controller.list = copy;
-    		
-    		
-
-            
         }
     }
 }
