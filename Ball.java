@@ -4,17 +4,13 @@ import java.util.Random;
 
 public class Ball extends GameObject{
 
+	// might move this to GameObject
 	public double vspeed = 5;
 	public double hspeed = 6;
 	
 	public Ball(String name, int x, int y)
 	{
 		super(name, x, y);
-		x_pre = x;
-		y_pre = y;
-		
-		draw_width = 32;
-		draw_height = 32;
 		
 		Random rand = new Random();
 		vspeed = rand.nextInt(20)-10;
@@ -25,12 +21,19 @@ public class Ball extends GameObject{
 
 	@Override
 	public void update() {
+		mandatory_update();
 		bounce();
-		x_pre = x;y_pre = y;
-		x+=hspeed;y+=vspeed;
+		
+		// might move this to mandatory_update???
+		x+=hspeed;
+		y+=vspeed;
+		
+		// might move this to mandatory_update???
 		direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 	
+	// bounce but there is a possibility of getting stuck
+	// might move this to GameObject
 	private void bounce()
 	{
 		if (x < 0 || x > room_width-32)

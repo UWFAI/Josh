@@ -1,5 +1,3 @@
-
-
 public class AI_simple  extends GameObject{
 
 	public AI_simple(String name, int x, int y) {
@@ -8,8 +6,7 @@ public class AI_simple  extends GameObject{
 
 	@Override
 	public void update() {
-		
-		
+		mandatory_update();
 	}
 
 }

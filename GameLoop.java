@@ -1,9 +1,10 @@
-
+// no need to look in here
 public abstract class GameLoop {
 	boolean running = true;
-	int fps = 60;
+	int fps = 60;//current fps, not target
 	int frameCount = 0;
 	
+	// starts the simulation in a new thread
 	public void start() {
 		Thread update = new Thread() {
 
@@ -14,8 +15,8 @@ public abstract class GameLoop {
 		update.start();
 	}
 
+	// the game loop
 	public void gameLoop() {
-
 		final double GAME_HERTZ = 30.0;
 		final double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
 		final int MAX_UPDATES_BEFORE_RENDER = 5;
@@ -30,6 +31,7 @@ public abstract class GameLoop {
 			double now = System.nanoTime();
 			int updateCount = 0;
 
+			// keep updating the world while running behind 
 			while (now - lastUpdateTime > TIME_BETWEEN_UPDATES && updateCount < MAX_UPDATES_BEFORE_RENDER) 
 			{
 				update();
@@ -41,11 +43,13 @@ public abstract class GameLoop {
 				lastUpdateTime = now - TIME_BETWEEN_UPDATES;
 			}
 
+			// render the world
 			float interpolation = Math.min(1.0f,
 					(float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
 			draw(interpolation);
 			lastRenderTime = now;
 
+			// find the fps
 			int thisSecond = (int) (lastUpdateTime / 1000000000);
 			if (thisSecond > lastSecondTime) {
 				fps = frameCount;
@@ -53,6 +57,7 @@ public abstract class GameLoop {
 				lastSecondTime = thisSecond;
 			}
 
+			// gives up recourses to the cpu
 			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS && now - lastUpdateTime < TIME_BETWEEN_UPDATES) 
 			{
 				Thread.yield();
