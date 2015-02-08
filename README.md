@@ -56,7 +56,7 @@ gives you the direction from one point to another again simple but very helpful.
 ```motion_set(double direction, double speed)```
 Want to move in a direction at a set speed? You might want to use this.
 
-```see()```
+``` see() ```
 This returns a list of other agents around you.
 
 
