@@ -9,6 +9,12 @@ public abstract class GameObject {
 	protected double x_pre;
 	protected double y_pre;
 	protected double direction;
+	protected double vspeed = 0;
+	protected double hspeed = 0;
+	protected int ID = 0;
+	
+	public String debugString = "test";
+	public ArrayList<GameObject> sightList = null;	
 	
 	// the type of call object
 	protected String name = null;
@@ -27,12 +33,24 @@ public abstract class GameObject {
 		this.x = x;
 		this.y = y;
 		direction = 0;
+		ID = ALL.ID;
+		ALL.ID++;
 	}
 	
-	// will work soon...
+	// 
 	protected ArrayList<GameObject> see()
 	{
-		return null;
+		ArrayList<GameObject> outList = new ArrayList<GameObject>();
+		// draw each object
+		for(GameObject item : ALL.controller.list)
+		{
+			double dis = ALL.point_distance(x, y, item.getX(), item.getY());
+			if (dis  < 100 && ID != item.getID()) 
+			{
+				outList.add(item);
+			}
+		}
+		return outList;
 	}
 	
 	public double getX()
@@ -43,14 +61,28 @@ public abstract class GameObject {
 	{
 		return y;
 	}
+	public int getID()
+	{
+		return ID;
+	}
 	public double getDirection()
 	{
 		return direction;
 	}
+	//Sets the motion of the calling object to the given direction and speed
+	public void motion_set(double direction, double speed)
+	{
+		vspeed = ALL.lengthdir_y(speed, direction);
+		hspeed = ALL.lengthdir_x(speed, direction);
+	}
 	// the updates the need to happen the the teams should not mess with
 	final void mandatory_update()
 	{
-		x_pre = x;y_pre = y;
+		x_pre = x;
+		y_pre = y;
+		x+=hspeed;
+		y+=vspeed;
+		sightList = see();
 	}
 
 	// will update every frame

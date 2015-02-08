@@ -59,33 +59,39 @@ public class GamePanel extends JPanel{
 		
 		// draw the background of the room
 		g2.setPaint(Color.white);
-		g2.fillRect(0, 0, getWidth(), getHeight());
+		g2.fillRect(0, 0, getWidth()+500, getHeight()+500);
 		
 		// draw the image only in the room
 		g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
 		g2.drawImage(img, - view_xview, - view_yview, null);
 		
-		// make a copy of the main list so not to cause errors
-		@SuppressWarnings("unchecked")
-		ArrayList<GameObject> copy = ((ArrayList<GameObject>) controller.list.clone());
-		// draw each object
-		for(GameObject item : copy)
+		
+		if (controller.list != null)
 		{
-			// git the deference of the view and object so to create the illusion of a view
-			int drawX = (int) (item.getX() - view_xview);
-			int drawy = (int) (item.getY() - view_yview);
+			@SuppressWarnings("unchecked")
+			// make a copy of the main list so not to cause errors
+			ArrayList<GameObject> copy = ((ArrayList<GameObject>) controller.list.clone());
+			// draw each object
+			for(GameObject item : copy)
+			{
+				// git the deference of the view and object so to create the illusion of a view
+				int drawX = (int) (item.getX() - view_xview);
+				int drawY = (int) (item.getY() - view_yview);
 
-			// draw the oval
-			g2.setColor(item.color);
-			g2.fillOval(drawX, drawy, 32, 32);
+				// draw the oval
+				g2.setColor(item.color);
+				g2.fillOval(drawX, drawY, 32, 32);
 
-			// draw the direction line
-			int cX = drawX+16;
-			int cY = drawy+16;
-			g2.setColor(Color.black);
-			g2.drawLine(cX, cY,
-					cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
-					cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
+				// draw the direction line
+				int cX = drawX+16;
+				int cY = drawY+16;
+				g2.setColor(Color.black);
+				g2.drawLine(cX, cY,
+						cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
+						cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
+						
+				g2.drawString(item.debugString, cX, cY+32); 
+			}
 		}
 
 		// draw the edge of the room

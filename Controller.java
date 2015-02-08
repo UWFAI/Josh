@@ -35,7 +35,8 @@ public class Controller extends GameLoop {
 	
 	
 	public static void main(String[] args) {
-		new Controller();
+		Controller con = new Controller();
+		ALL.controller = con;
 	}
 
 

@@ -23,7 +23,7 @@ public abstract class GameLoop {
 		double lastUpdateTime = System.nanoTime();
 		double lastRenderTime = System.nanoTime();
 
-		final double TARGET_FPS = 60;
+		final double TARGET_FPS = 10;
 		final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
 		int lastSecondTime = (int) (lastUpdateTime / 1000000000);
