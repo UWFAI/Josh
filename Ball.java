@@ -15,14 +15,10 @@ public class Ball extends GameObject{
 	}
 
 	@Override
-	public void update() {
-		mandatory_update();
+	public void update_logic() {
 		bounce();
 		
 		debugString = Integer.toString(sightList.size());
-
-		// might move this to mandatory_update???
-		//direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 	
 	// bounce but there is a possibility of getting stuck

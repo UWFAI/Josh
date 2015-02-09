@@ -25,8 +25,8 @@ public class AI_simple extends GameObject{
 	}
 
 	@Override
-	public void update() {
-		mandatory_update();
+	public void update_logic() {
+		// your movement logic here...
 	}
 
 }

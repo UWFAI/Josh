@@ -57,18 +57,22 @@ public abstract class GameObject {
 	{
 		return x;
 	}
+	
 	public double getY()
 	{
 		return y;
 	}
+
 	public int getID()
 	{
 		return ID;
 	}
+
 	public double getDirection()
 	{
 		return direction;
 	}
+
 	//Sets the motion of the calling object to the given direction and speed
 	public void motion_set(double direction, double speed)
 	{
@@ -76,7 +80,7 @@ public abstract class GameObject {
 		hspeed = ALL.lengthdir_x(speed, direction);
 	}
 	// the updates the need to happen the the teams should not mess with
-	final void mandatory_update()
+	final private void mandatory_update()
 	{
 		x_pre = x;
 		y_pre = y;
@@ -86,6 +90,32 @@ public abstract class GameObject {
 		direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 
-	// will update every frame
-	public abstract void update();
+	/*
+		During the execution of the game this functions will be called before
+		the rendering of each frame, so, this object can be correctly update 
+		in relation to the passed time since the last frame and/or any events 
+		that may have happend.
+	*/
+	final public void update()
+	{
+		/*
+			The current implementation tries to simplify any subclass by separating
+			the intrinsic behavior of this function from the subclass specific behavior
+		*/
+
+		// this is what NEED to be done regardless of the subclass implementation
+		mandatory_update();
+
+		// this is the specific behavior of the subclass
+		update_logic();
+	}
+
+	/* 
+		This function defines, specific to a subclass, what should happen, so, 
+		this game object is up to date considerring the current time difference 
+		between the last frame and the current one and/or any events that may 
+		have ocurred.
+	*/
+	// TO DO: find a better name for this function
+	public abstract void update_logic();
 }

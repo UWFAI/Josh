@@ -7,8 +7,7 @@ public class AI_simple extends GameObject{
 	}
 
 	@Override
-	public void update() {
-		mandatory_update();
+	public void update_logic() {
 		
 		// get all the angles of all the objects it can see
 		ArrayList<Double> angleList = new ArrayList<Double>();
