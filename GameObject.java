@@ -83,6 +83,7 @@ public abstract class GameObject {
 		x+=hspeed;
 		y+=vspeed;
 		sightList = see();
+		direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 
 	// will update every frame
