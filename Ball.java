@@ -22,7 +22,7 @@ public class Ball extends GameObject{
 		debugString = Integer.toString(sightList.size());
 
 		// might move this to mandatory_update???
-		direction = ALL.point_direction(x_pre, y_pre, x, y);
+		//direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 	
 	// bounce but there is a possibility of getting stuck

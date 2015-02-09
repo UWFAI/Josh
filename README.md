@@ -56,6 +56,9 @@ gives you the direction from one point to another again simple but very helpful.
 ```motion_set(double direction, double speed)```
 Want to move in a direction at a set speed? You might want to use this.
 
+```getAverageAngle(ArrayList<Double> sample)```
+For the people that are not very good at math.
+
 ``` see() ```
 This returns a list of other agents around you.
 

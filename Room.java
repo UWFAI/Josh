@@ -18,6 +18,7 @@ public class Room {
 		for (int i = 0; i < 100; i++)
 			controller.list.add(new Ball("ball", rand.nextInt(width-32), rand.nextInt(height-32)));
 			
-		controller.list.add(new AI_simple("simple", 64, 64));
+		for (int i = 0; i < 10; i++)
+			controller.list.add(new AI_simple("simple", rand.nextInt(width-32), rand.nextInt(height-32)));
 	}
 }

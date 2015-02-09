@@ -62,7 +62,8 @@ public class GamePanel extends JPanel{
 		g2.fillRect(0, 0, getWidth()+500, getHeight()+500);
 		
 		// draw the image only in the room
-		g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
+		if (controller.room!=null)
+			g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
 		g2.drawImage(img, - view_xview, - view_yview, null);
 		
 		
@@ -90,12 +91,13 @@ public class GamePanel extends JPanel{
 						cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
 						cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
 						
-				g2.drawString(item.debugString, cX, cY+32); 
+				drawString(g2, item.debugString, cX, cY+32); 
 			}
 		}
 
 		// draw the edge of the room
-		g2.drawRect(- view_xview, - view_yview, controller.room.width, controller.room.height);
+		if (controller.room!=null)
+			g2.drawRect(- view_xview, - view_yview, controller.room.width, controller.room.height);
 
 		// free
 		g2.dispose();
@@ -106,4 +108,9 @@ public class GamePanel extends JPanel{
 		// stop the lag
 		Toolkit.getDefaultToolkit().sync();
 	}
+	
+	private void drawString(Graphics2D g, String text, int x, int y) {
+        for (String line : text.split("\n"))
+            g.drawString(line, x, y += g.getFontMetrics().getHeight());
+    }
 }
