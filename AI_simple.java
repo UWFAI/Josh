@@ -4,6 +4,7 @@ public class AI_simple extends GameObject{
 
 	public AI_simple(String name, int x, int y) {
 		super(name, x, y);
+		abilitySet(90, 10, 0);
 	}
 
 	@Override
@@ -19,24 +20,21 @@ public class AI_simple extends GameObject{
 		// only if there is something to run from
 		if (angleList.size() > 0)
 		{
-			// do all the hard math
-			double angle = ALL.getAverageAngle(angleList);
-			// run away from it
-			motion_set(angle+180.0, 3);
+			runFromOthers(angleList);
+		} else {
+			motion_set(direction, 0);
 		}
 		
 		// show a debug message
-		debugString = Double.toString(x) + "\n" + Double.toString(y);
-		
-		stayInRoom();
+		debugString = Integer.toString(resources);
+
 	}
 	
-	public void stayInRoom()
+	public void runFromOthers(ArrayList<Double> angleList)
 	{
-		if (x<0) x = 0;
-		if (y<0) y = 0;
-		
-		if (x>ALL.controller.room.width-32) x = ALL.controller.room.width-32;
-		if (y>ALL.controller.room.height-32) y = ALL.controller.room.height-32;
+		// do all the hard math
+		double angle = ALL.getAverageAngle(angleList);
+		// run away from it
+		motion_set(angle+180.0, 3);
 	}
 }

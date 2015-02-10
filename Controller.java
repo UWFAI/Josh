@@ -20,11 +20,21 @@ public class Controller extends GameLoop {
 	
 	@Override
 	public void update() {
-		for (GameObject item : list) {
+		//for (GameObject item : list) {
+		for (int i = list.size() - 1; i >= 0; i--) 
+		{
+			GameObject item = list.get(i);
+
 			item.room_width = room.width;
 			item.room_height = room.height;
 			item.update();
+			
+			if (item.getDestory() == true)
+			{
+				list.remove(i);
+			}
 		}
+
 	}
 
 	@Override

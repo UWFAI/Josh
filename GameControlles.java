@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 // this is the user interface for the simulation
 // no need to look in here
@@ -22,17 +25,85 @@ public class GameControlles extends JPanel{
 	public GameControlles(Controller c, int x, int y) {
 		super();
 		this.controller = c;
-		setPreferredSize(new Dimension(220, 220));
+		//setPreferredSize(new Dimension(640, 480));
 		
 		frame = new JFrame("Controlles");
-		frame.getContentPane().add(this, BorderLayout.CENTER);
+		frame.getContentPane().add(this);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.pack();
 		frame.setVisible(true);
 		frame.setLocation(x, y);
 
-		add(new Map());
+		add(new Map(), BorderLayout.PAGE_START);
+		add(new Table(), BorderLayout.PAGE_START);
+
+		/*JTable table = new JTable(2, 3);
+
+		table.setEnabled(false);
+		add(table, BorderLayout.PAGE_START);
+		*/
+		frame.pack();
+	}
+	
+	// the info table
+	class Table extends JPanel {
+		int col_num = 3;
+		int row_num = 12;
+		JTable table;
+		
+		Table() {
+			setBorder(BorderFactory.createLineBorder(Color.black));
+			
+			table = new JTable(row_num, col_num);
+			//table.setEnabled(false);
+			add(table);
+		}
+		
+		// notreally using this to paint...
+		@Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+
+			// top row
+        	table.setValueAt("Name", 0, 0);
+        	table.setValueAt("Number Of", 0, 1);
+        	table.setValueAt("Resources", 0, 2);
+        	
+        	String[] names 	= new String[11];
+        	int[] num 		= new int[]{0,0,0,0,0,0,0,0,0,0,0};
+        	int[] res 		= new int[]{0,0,0,0,0,0,0,0,0,0,0};
+        	
+        	@SuppressWarnings("unchecked")
+			ArrayList<GameObject> copy = (ArrayList<GameObject>) controller.list.clone();
+    		for(GameObject item : copy)
+    		{
+    			String name = item.getName();
+				for(int i=0; i<11; i++)
+				{
+					if (names[i] == null)
+					{
+						names[i] = name;
+						num[i]++;
+						res[i]+=item.resources;
+						break;
+					}
+					if (names[i] == name)
+					{
+						num[i]++;
+						res[i]+=item.resources;
+						break;
+					}
+				}
+    		}
+    		
+		    for(int i=0; i<11; i++)
+			{
+				table.setValueAt(names[i], i+1, 0);
+				table.setValueAt(num[i], i+1, 1);
+				table.setValueAt(res[i], i+1, 2);
+			}
+        }
 	}
 	
 	// the mini map!
@@ -100,6 +171,10 @@ public class GameControlles extends JPanel{
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             
+            // error cheaking
+            if (controller.room == null)
+            	return;
+            	
             // keeps these updated
             multW = controller.room.width/size;
             multH = controller.room.height/size;
