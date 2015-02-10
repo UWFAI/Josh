@@ -12,6 +12,17 @@ public abstract class GameObject {
 	protected double vspeed = 0;
 	protected double hspeed = 0;
 	protected int ID = 0;
+	protected boolean destory = false;
+	
+	int resources = 0;
+	
+	// the ability variables
+	protected final int maxAbilityTokens = 100;
+	protected int ability_sight = 0;
+	protected int ability_speed = 0;
+	protected int ability_strength = 0;
+	//protected int ability_
+	
 	
 	public String debugString = "test";
 	public ArrayList<GameObject> sightList = null;	
@@ -27,6 +38,7 @@ public abstract class GameObject {
 	// default color
 	public Color color = Color.BLUE;
 	
+	// default constructor
 	public GameObject(String name, int x, int y)
 	{
 		this.name = name;
@@ -37,15 +49,32 @@ public abstract class GameObject {
 		ALL.ID++;
 	}
 	
-	// 
+	protected final boolean abilitySet(int sight, int speed, int strength)
+	{
+		if (sight+speed+strength > maxAbilityTokens)
+			return false;
+			
+		ability_sight = sight;
+		ability_speed = speed;
+		ability_strength = strength;
+		
+		return true;
+	}
+	
+	// returns a list of objects around the agent
+	// uses ability_sight as the sight distance but that might need to be
+	// multiplied by a number like 2 to keep the simulation good
 	protected ArrayList<GameObject> see()
 	{
+		// crate a new list to store the agents that can be seen
 		ArrayList<GameObject> outList = new ArrayList<GameObject>();
-		// draw each object
+		// with each agent
 		for(GameObject item : ALL.controller.list)
 		{
-			double dis = ALL.point_distance(x, y, item.getX(), item.getY());
-			if (dis  < 100 && ID != item.getID()) 
+			// get the distance from self to other
+			double dis = ALL.point_distance(x+16, y+16, item.getX()+16, item.getY()+16);
+			// if not self and in range add to list
+			if (dis  < (ability_sight) && ID != item.getID()) 
 			{
 				outList.add(item);
 			}
@@ -67,18 +96,40 @@ public abstract class GameObject {
 	{
 		return ID;
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
 
 	public double getDirection()
 	{
 		return direction;
 	}
+	
+	public boolean getDestory()
+	{
+		return destory;
+	}
 
 	//Sets the motion of the calling object to the given direction and speed
 	public void motion_set(double direction, double speed)
 	{
+		if (speed > ability_speed)
+			speed = ability_speed;
 		vspeed = ALL.lengthdir_y(speed, direction);
 		hspeed = ALL.lengthdir_x(speed, direction);
 	}
+	
+	final private void stayInRoom()
+	{
+		if (x<0) x = 0;
+		if (y<0) y = 0;
+		
+		if (x>ALL.controller.room.width-32) x = ALL.controller.room.width-32;
+		if (y>ALL.controller.room.height-32) y = ALL.controller.room.height-32;
+	}
+	
 	// the updates the need to happen the the teams should not mess with
 	final private void mandatory_update()
 	{
@@ -87,14 +138,15 @@ public abstract class GameObject {
 		x+=hspeed;
 		y+=vspeed;
 		sightList = see();
-		direction = ALL.point_direction(x_pre, y_pre, x, y);
+		if (x != x_pre || y != y_pre)
+			direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
 
 	/*
 		During the execution of the game this functions will be called before
 		the rendering of each frame, so, this object can be correctly update 
 		in relation to the passed time since the last frame and/or any events 
-		that may have happend.
+		that may have happened.
 	*/
 	final public void update()
 	{
@@ -108,14 +160,18 @@ public abstract class GameObject {
 
 		// this is the specific behavior of the subclass
 		update_logic();
+		
+		//
+		stayInRoom();
 	}
 
 	/* 
 		This function defines, specific to a subclass, what should happen, so, 
-		this game object is up to date considerring the current time difference 
+		this game object is up to date considering the current time difference 
 		between the last frame and the current one and/or any events that may 
-		have ocurred.
+		have occurred.
 	*/
 	// TO DO: find a better name for this function
+	// I like the name -Josh
 	public abstract void update_logic();
 }

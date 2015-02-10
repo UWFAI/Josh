@@ -64,7 +64,7 @@ public class GamePanel extends JPanel{
 		// draw the image only in the room
 		if (controller.room!=null)
 			g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
-		g2.drawImage(img, - view_xview, - view_yview, null);
+		//g2.drawImage(img, - view_xview, - view_yview, null);
 		
 		
 		if (controller.list != null)
@@ -83,19 +83,23 @@ public class GamePanel extends JPanel{
 				g2.setColor(item.color);
 				g2.fillOval(drawX, drawY, 32, 32);
 
-				// draw the direction line
 				int cX = drawX+16;
 				int cY = drawY+16;
+				// draw the direction line
+				if (item.getName() != "resource")
+				{
+					g2.setColor(Color.black);
+					g2.drawLine(cX, cY,
+							cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
+							cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
+				}
 				g2.setColor(Color.black);
-				g2.drawLine(cX, cY,
-						cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
-						cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
-						
 				drawString(g2, item.debugString, cX, cY+32); 
 			}
 		}
 
 		// draw the edge of the room
+		g2.setColor(Color.black);
 		if (controller.room!=null)
 			g2.drawRect(- view_xview, - view_yview, controller.room.width, controller.room.height);
 

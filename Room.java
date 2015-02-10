@@ -15,10 +15,13 @@ public class Room {
 	public void start() {
 		// fill room with things
 		Random rand = new Random();
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 10; i++)
 			controller.list.add(new Ball("ball", rand.nextInt(width-32), rand.nextInt(height-32)));
 			
 		for (int i = 0; i < 10; i++)
 			controller.list.add(new AI_simple("simple", rand.nextInt(width-32), rand.nextInt(height-32)));
+			
+		for (int i = 0; i < 100; i++)
+			controller.list.add(new Resource("resource", rand.nextInt(width-32), rand.nextInt(height-32)));
 	}
 }
