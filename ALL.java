@@ -2,10 +2,6 @@ import java.util.ArrayList;
 
 // things that all classes need
 public final class ALL {
-
-	// making the controller global
-	public static Controller controller = null;
-	public static int ID = 0;
 	
 	//Returns the horizontal x-component of the vector determined by the indicated length and direction.
 	public static double lengthdir_x(double len,double dir)

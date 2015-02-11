@@ -1,8 +1,8 @@
-
+import java.awt.Graphics2D;
 import java.awt.Color;
 import java.util.ArrayList;
 
-// all object in the game must extend this class!
+// all object in the game must extend this class because it basis for such objects!
 public abstract class GameObject {
 	protected double x;
 	protected double y;
@@ -11,7 +11,7 @@ public abstract class GameObject {
 	protected double direction;
 	protected double vspeed = 0;
 	protected double hspeed = 0;
-	protected int ID = 0;
+	protected int id = 0;
 	protected boolean destory = false;
 	
 	int resources = 0;
@@ -37,6 +37,9 @@ public abstract class GameObject {
 	
 	// default color
 	public Color color = Color.BLUE;
+
+	// keep track of what is the next id to be used
+	private static int nextID = 0;
 	
 	// default constructor
 	public GameObject(String name, int x, int y)
@@ -45,8 +48,13 @@ public abstract class GameObject {
 		this.x = x;
 		this.y = y;
 		direction = 0;
-		ID = ALL.ID;
-		ALL.ID++;
+		this.sightList = new ArrayList<GameObject>();
+
+		synchronized (this)
+		{
+			id = nextID;
+			nextID++;
+		}
 	}
 	
 	protected final boolean abilitySet(int sight, int speed, int strength)
@@ -64,22 +72,37 @@ public abstract class GameObject {
 	// returns a list of objects around the agent
 	// uses ability_sight as the sight distance but that might need to be
 	// multiplied by a number like 2 to keep the simulation good
-	protected ArrayList<GameObject> see()
+	// protected ArrayList<GameObject> see()
+	// {
+	// 	// crate a new list to store the agents that can be seen
+	// 	ArrayList<GameObject> outList = new ArrayList<GameObject>();
+	// 	// // with each agent
+	// 	// for(GameObject item : ALL.controller.list)
+	// 	// {
+	// 	// 	// get the distance from self to other
+	// 	// 	double dis = ALL.point_distance(x+16, y+16, item.getX()+16, item.getY()+16);
+	// 	// 	// if not self and in range add to list
+	// 	// 	if (dis  < (ability_sight) && id != item.getID()) 
+	// 	// 	{
+	// 	// 		outList.add(item);
+	// 	// 	}
+	// 	// }
+	// 	return outList;
+	// }
+
+	public void setX(int x)
 	{
-		// crate a new list to store the agents that can be seen
-		ArrayList<GameObject> outList = new ArrayList<GameObject>();
-		// with each agent
-		for(GameObject item : ALL.controller.list)
-		{
-			// get the distance from self to other
-			double dis = ALL.point_distance(x+16, y+16, item.getX()+16, item.getY()+16);
-			// if not self and in range add to list
-			if (dis  < (ability_sight) && ID != item.getID()) 
-			{
-				outList.add(item);
-			}
-		}
-		return outList;
+		this.x = x;
+	}
+	
+	public void setY(int y)
+	{
+		this.y = y;
+	}
+
+	public void setSightList(ArrayList<GameObject> sightList){
+		this.sightList.clear();
+		this.sightList.addAll(sightList);	
 	}
 	
 	public double getX()
@@ -94,7 +117,7 @@ public abstract class GameObject {
 
 	public int getID()
 	{
-		return ID;
+		return id;
 	}
 	
 	public String getName()
@@ -121,15 +144,6 @@ public abstract class GameObject {
 		hspeed = ALL.lengthdir_x(speed, direction);
 	}
 	
-	final private void stayInRoom()
-	{
-		if (x<0) x = 0;
-		if (y<0) y = 0;
-		
-		if (x>ALL.controller.room.width-32) x = ALL.controller.room.width-32;
-		if (y>ALL.controller.room.height-32) y = ALL.controller.room.height-32;
-	}
-	
 	// the updates the need to happen the the teams should not mess with
 	final private void mandatory_update()
 	{
@@ -137,7 +151,7 @@ public abstract class GameObject {
 		y_pre = y;
 		x+=hspeed;
 		y+=vspeed;
-		sightList = see();
+		// sightList = see();
 		if (x != x_pre || y != y_pre)
 			direction = ALL.point_direction(x_pre, y_pre, x, y);
 	}
@@ -161,8 +175,6 @@ public abstract class GameObject {
 		// this is the specific behavior of the subclass
 		update_logic();
 		
-		//
-		stayInRoom();
 	}
 
 	/* 
@@ -171,7 +183,11 @@ public abstract class GameObject {
 		between the last frame and the current one and/or any events that may 
 		have occurred.
 	*/
-	// TO DO: find a better name for this function
-	// I like the name -Josh
 	public abstract void update_logic();
+
+	/*
+		This defines how a game object is draw, repecting the current values 
+		of its variables.
+	*/
+	public abstract void draw(Graphics2D g);
 }

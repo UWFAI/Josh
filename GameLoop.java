@@ -1,4 +1,5 @@
 // no need to look in here
+// even if it is yourself, someone, someday will need to look here! - Renan
 public abstract class GameLoop {
 	boolean running = true;
 	int fps = 60;//current fps, not target

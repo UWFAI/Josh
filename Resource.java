@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Graphics2D;
+
 
 public class Resource extends GameObject{
 
@@ -22,5 +24,10 @@ public class Resource extends GameObject{
 				item.resources += 1;
 			}
 		}
+	}
+
+	@Override
+	public void draw(Graphics2D g){
+				Drawer.drawCircle(g, this, Drawer.CIRCLE_SIZE);
 	}
 }

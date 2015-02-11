@@ -1,8 +1,8 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 // this is the user interface for the simulation
 // no need to look in here
+// even if it is yourself, someone, some day will need to look here! - Renan
 @SuppressWarnings("serial")
 public class GameControlles extends JPanel{
 	private JFrame frame;
@@ -74,8 +75,14 @@ public class GameControlles extends JPanel{
         	int[] num 		= new int[]{0,0,0,0,0,0,0,0,0,0,0};
         	int[] res 		= new int[]{0,0,0,0,0,0,0,0,0,0,0};
         	
+          if (controller.room == null)
+          {
+            return;
+          }
+
         	@SuppressWarnings("unchecked")
-			ArrayList<GameObject> copy = (ArrayList<GameObject>) controller.list.clone();
+      ArrayList<GameObject> copy = controller.room.getObjectListCopy();
+      // ArrayList<GameObject> copy = new ArrayList<>();
     		for(GameObject item : copy)
     		{
     			String name = item.getName();
@@ -170,7 +177,7 @@ public class GameControlles extends JPanel{
         @Override
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            
+
             // error cheaking
             if (controller.room == null)
             	return;
@@ -190,18 +197,16 @@ public class GameControlles extends JPanel{
             
             g.setColor(Color.black);
             g.drawRect(x, y, view_width, view_height);            
-            
+        
             // draw each object
-    		@SuppressWarnings("unchecked")
-			ArrayList<GameObject> copy = (ArrayList<GameObject>) controller.list.clone();
-    		for(GameObject item : copy)
-    		{
-    			int dx = (int) (item.getX()/multW);
-    			int dy = (int) item.getY()/(controller.room.height/size);
-    			
-    			
-    			g.fillOval(dx, dy, 2, 2);
-    		}
+      		@SuppressWarnings("unchecked")
+  			ArrayList<GameObject> copy = controller.room.getObjectListCopy();
+      		for(GameObject item : copy)
+      		{
+            int dx = (int)(item.getX() / multW);
+            int dy = (int)(item.getY() / multH);
+      			g.fillOval(dx, dy, 2, 2);
+      		}
         }
     }
 }

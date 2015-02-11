@@ -61,47 +61,23 @@ public class GamePanel extends JPanel{
 		g2.setPaint(Color.white);
 		g2.fillRect(0, 0, getWidth()+500, getHeight()+500);
 		
-		// draw the image only in the room
-		if (controller.room!=null)
-			g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
-		//g2.drawImage(img, - view_xview, - view_yview, null);
-		
-		
-		if (controller.list != null)
+		// if we have a room to draw
+		if (controller.room != null)
 		{
-			@SuppressWarnings("unchecked")
-			// make a copy of the main list so not to cause errors
-			ArrayList<GameObject> copy = ((ArrayList<GameObject>) controller.list.clone());
-			// draw each object
-			for(GameObject item : copy)
-			{
-				// git the deference of the view and object so to create the illusion of a view
-				int drawX = (int) (item.getX() - view_xview);
-				int drawY = (int) (item.getY() - view_yview);
+			// draw the image only in the room
+			g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
+			//g2.drawImage(img, - view_xview, - view_yview, null);
+			
+			// set a translation so it just draw what is inside the view
+			g2.translate(-view_xview, -view_yview);
 
-				// draw the oval
-				g2.setColor(item.color);
-				g2.fillOval(drawX, drawY, 32, 32);
+			// draw room
+			controller.room.draw(g2);
 
-				int cX = drawX+16;
-				int cY = drawY+16;
-				// draw the direction line
-				if (item.getName() != "resource")
-				{
-					g2.setColor(Color.black);
-					g2.drawLine(cX, cY,
-							cX+(int)ALL.lengthdir_x(16.0, item.getDirection()),
-							cY+(int)ALL.lengthdir_y(16.0, item.getDirection()));
-				}
-				g2.setColor(Color.black);
-				drawString(g2, item.debugString, cX, cY+32); 
-			}
+			// set everything back to the original
+			g2.translate(view_xview, view_yview);			
+			
 		}
-
-		// draw the edge of the room
-		g2.setColor(Color.black);
-		if (controller.room!=null)
-			g2.drawRect(- view_xview, - view_yview, controller.room.width, controller.room.height);
 
 		// free
 		g2.dispose();
@@ -112,9 +88,4 @@ public class GamePanel extends JPanel{
 		// stop the lag
 		Toolkit.getDefaultToolkit().sync();
 	}
-	
-	private void drawString(Graphics2D g, String text, int x, int y) {
-        for (String line : text.split("\n"))
-            g.drawString(line, x, y += g.getFontMetrics().getHeight());
-    }
 }
