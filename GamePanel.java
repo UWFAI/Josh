@@ -60,7 +60,7 @@ public class GamePanel extends JPanel{
 		// draw the background of the room
 		g2.setPaint(Color.white);
 		g2.fillRect(0, 0, getWidth()+500, getHeight()+500);
-		g2.drawImage(img, - view_xview, - view_yview, null);
+		g2.drawImage(img, - view_xview, - view_yview, getWidth(), getHeight(), null);
 
 		// if we have a room to draw
 		if (controller.room != null)
