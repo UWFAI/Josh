@@ -30,7 +30,7 @@ public class GamePanel extends JPanel{
 
 		// the size the JPanel wants to be on start up
 		setPreferredSize(new Dimension(640, 480));
-		
+
 		// the frame/window properties
 		frame = new JFrame("game");
 		frame.getContentPane().add(this, BorderLayout.CENTER);
@@ -41,7 +41,7 @@ public class GamePanel extends JPanel{
 		frame.setLocationRelativeTo(null);
 		bufferStrategy = frame.getBufferStrategy();
 
-		img = Toolkit.getDefaultToolkit().createImage("images/grass.jpg");
+		img = Toolkit.getDefaultToolkit().createImage("images/texture.jpg");
 	}
 
 
@@ -56,18 +56,19 @@ public class GamePanel extends JPanel{
 
         // get the buffers graphics to draw with
 		Graphics2D g2 = (Graphics2D) bufferStrategy.getDrawGraphics();
-		
+
 		// draw the background of the room
 		g2.setPaint(Color.white);
 		g2.fillRect(0, 0, getWidth()+500, getHeight()+500);
-		
+		g2.drawImage(img, - view_xview, - view_yview, null);
+
 		// if we have a room to draw
 		if (controller.room != null)
 		{
 			// draw the image only in the room
 			g2.setClip(- view_xview, - view_yview, controller.room.width+1, controller.room.height+1);
 			//g2.drawImage(img, - view_xview, - view_yview, null);
-			
+
 			// set a translation so it just draw what is inside the view
 			g2.translate(-view_xview, -view_yview);
 
@@ -75,8 +76,8 @@ public class GamePanel extends JPanel{
 			controller.room.draw(g2);
 
 			// set everything back to the original
-			g2.translate(view_xview, view_yview);			
-			
+			g2.translate(view_xview, view_yview);
+
 		}
 
 		// free
